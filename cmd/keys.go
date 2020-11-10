@@ -28,6 +28,10 @@ import (
 	"github.com/cosmos/relayer/relayer"
 )
 
+const (
+	flagCoinType = "coin-type"
+)
+
 // keysCmd represents the keys command
 func keysCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -75,7 +79,9 @@ func keysAddCmd() *cobra.Command {
 				return err
 			}
 
-			info, err := chain.Keybase.NewAccount(keyName, mnemonic, "", hd.CreateHDPath(118, 0, 0).String(), hd.Secp256k1)
+			coinType, _ := cmd.Flags().GetUint32(flagCoinType)
+
+			info, err := chain.Keybase.NewAccount(keyName, mnemonic, "", hd.CreateHDPath(coinType, 0, 0).String(), hd.Secp256k1)
 			if err != nil {
 				return err
 			}
@@ -91,6 +97,7 @@ func keysAddCmd() *cobra.Command {
 			return nil
 		},
 	}
+	cmd.Flags().Uint32(flagCoinType, 188, "coin type number for HD derivation")
 
 	return cmd
 }
@@ -118,7 +125,9 @@ func keysRestoreCmd() *cobra.Command {
 				return errKeyExists(keyName)
 			}
 
-			info, err := chain.Keybase.NewAccount(keyName, args[2], "", hd.CreateHDPath(118, 0, 0).String(), hd.Secp256k1)
+			coinType, _ := cmd.Flags().GetUint32(flagCoinType)
+
+			info, err := chain.Keybase.NewAccount(keyName, args[2], "", hd.CreateHDPath(coinType, 0, 0).String(), hd.Secp256k1)
 			if err != nil {
 				return err
 			}
@@ -128,6 +137,7 @@ func keysRestoreCmd() *cobra.Command {
 			return nil
 		},
 	}
+	cmd.Flags().Uint32(flagCoinType, 188, "coin type number for HD derivation")
 
 	return cmd
 }

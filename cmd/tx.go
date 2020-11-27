@@ -271,7 +271,7 @@ func linkThenStartCmd() *cobra.Command {
 			return sCmd.RunE(cmd, args)
 		},
 	}
-	return timeoutFlag(cmd)
+	return strategyFlag(timeoutFlag(cmd))
 }
 
 func relayMsgsCmd() *cobra.Command {
